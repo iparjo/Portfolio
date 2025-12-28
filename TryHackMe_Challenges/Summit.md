@@ -95,6 +95,8 @@
 <img width="504" height="147" alt="16" src="https://github.com/user-attachments/assets/32c27d7d-f123-4c0b-abf9-9bdc5a7b1746" />
 
 - We have to select Registry Modifications on step 2 as it’s the one the malware manipulates.
+<img width="503" height="393" alt="17" src="https://github.com/user-attachments/assets/563ca7ec-3df4-4d36-b48a-f7fde76c0a86" />
+
 - We just follow the requested options, the first one is entering the modified registry key.
 - Next we enter the name of the registry name.
 - To finish, we put in the value modified by the malware and follow the established type of nomination according to the MITRE framework. We have a multiple selection, however in this case we can rest assured it’s Defense Evasion as Disabling windows defender is a way to avoid its protection.
@@ -107,6 +109,7 @@
 #### Blocking Phase - 5 - Tools
 - Here are the contents of the file outgoing_connections.log:
 
+```
 2023-08-15 09:00:00 | Source: 10.10.15.12 | Destination: 51.102.10.19 | Port: 443 | Size: 97 bytes
 2023-08-15 09:23:45 | Source: 10.10.15.12 | Destination: 43.10.65.115 | Port: 443 | Size: 21541 bytes
 2023-08-15 09:30:00 | Source: 10.10.15.12 | Destination: 51.102.10.19 | Port: 443 | Size: 97 bytes
@@ -141,9 +144,10 @@
 2023-08-15 20:00:00 | Source: 10.10.15.12 | Destination: 51.102.10.19 | Port: 443 | Size: 97 bytes
 2023-08-15 20:30:00 | Source: 10.10.15.12 | Destination: 51.102.10.19 | Port: 443 | Size: 97 bytes
 2023-08-15 21:00:00 | Source: 10.10.15.12 | Destination: 51.102.10.19 | Port: 443 | Size: 97 bytes
-`
+```
+
 - And here we have the scan of sample5.exe:
-<img width="503" height="393" alt="17" src="https://github.com/user-attachments/assets/563ca7ec-3df4-4d36-b48a-f7fde76c0a86" />
+<img width="836" height="256" alt="18" src="https://github.com/user-attachments/assets/ce35461e-7921-4503-9b52-12a90f81d2a8" />
 
 - Ok, so… We can assume a huge possibility here… Our scan says that something is being downloaded from the Internet, and not only that, there are a high number of consecutive connections.
 - We can also notice something incredibly remarkable… On the log, there’s a very interesting pattern that happens too frequently.
@@ -151,12 +155,12 @@
 - That’s it, every half hour, something is being transferred with the same exact size, from the same ip to the same place… Is it really normal to download a thing every half hour? Don’t we all download everything at the same time?
 - So that must be our clue.
 - Let’s go back to sigma rule builder.
-<img width="836" height="256" alt="18" src="https://github.com/user-attachments/assets/ce35461e-7921-4503-9b52-12a90f81d2a8" />
+<img width="503" height="239" alt="19" src="https://github.com/user-attachments/assets/e87f7ac9-45e8-4551-9bda-7fbebc71e238" />
 
 - We create a Sysmon Event Log
 - On step 2, we select Network Connections.
 - Then we create the following rule:
-<img width="503" height="239" alt="19" src="https://github.com/user-attachments/assets/e87f7ac9-45e8-4551-9bda-7fbebc71e238" />
+<img width="503" height="392" alt="20" src="https://github.com/user-attachments/assets/443acbc2-5b17-4d7b-aeb6-4432d47f0559" />
 
 - As the attack has evolved and our attacker might have access to pointing to any ip or any port, we want to make sure both have the word any included.
 - The size of the downloaded thing is exactly 97 bytes all the time, so we’ll put that.
@@ -172,7 +176,7 @@
 #### Blocking phase - 6 - TTPs - Final
 - Here’s the data of the commands.log sent by our pentesting team
 
-
+```
 dir c:\ >> %temp%\exfiltr8.log
 dir "c:\Documents and Settings" >> %temp%\exfiltr8.log
 dir "c:\Program Files\" >> %temp%\exfiltr8.log
@@ -183,5 +187,55 @@ systeminfo >> %temp%\exfiltr8.log
 ipconfig /all >> %temp%\exfiltr8.log
 netstat -ano >> %temp%\exfiltr8.log
 net start >> %temp%\exfiltr8.log
-And here is our scan:
-<img width="503" height="392" alt="20" src="https://github.com/user-attachments/assets/443acbc2-5b17-4d7b-aeb6-4432d47f0559" />
+```
+
+- And here is our scan:
+<img width="689" height="372" alt="21" src="https://github.com/user-attachments/assets/a12317f9-dd5c-4436-ac37-fd34c43c8e47" />
+
+<img width="832" height="211" alt="22" src="https://github.com/user-attachments/assets/defff034-1e31-4425-8cfe-5d163584d59f" />
+
+<img width="833" height="242" alt="23" src="https://github.com/user-attachments/assets/564cc71f-6c84-4375-9e88-45de68cc53fd" />
+
+<img width="832" height="129" alt="24" src="https://github.com/user-attachments/assets/34cfe752-49b8-4961-b2e0-94077af51c3f" />
+
+<img width="503" height="220" alt="25" src="https://github.com/user-attachments/assets/faac6df9-abe0-4dd2-99c2-516db0aa0c4d" />
+
+
+- In the last phase, we’ll see that we need to create a rule for file creation and modification also with the help of Sigma. Including the File Path, the File Name and MITRE ATT&CK ID set as Exfiltration as they wanted to extract information f
+- The pentesting team was creating a file through the use of some cmd commands in order to extract some overall info from our system.
+- We now can conclude our penetration testing team was trying to infiltrate in our system in order to exfiltrate information. As we have learned about their TTPs, now they can rest assured we know what their future paths might be if they keep operating in this way.
+- Now that we have discovered their motivations and how they operate, we can be safe for some time, as they know we can block their future attempts at least until they elaborate another plan, but fortunately, it might be a while until they try again.
+- We get our final answer for question 6:
+    - THM{c8951b2ad24bbcbac60c16cf2c83d92c}
+
+### Questions to answers
+#### 1- What is the first flag you receive after successfully detecting sample1.exe?
+Answer: THM{f3cbf08151a11a6a331db9c6cf5f4fe4}
+#### 2 – What is the second flag you receive after successfully detecting sample2.exe?
+Answer: THM{2ff48a3421a938b388418be273f4806d}
+#### 3 – What is the third flag you receive after successfully detecting sample3.exe?
+Answer: THM{4eca9e2f61a19ecd5df34c788e7dce16}
+#### 4 – What is the fourth flag you receive after successfully detecting sample4.exe?
+Answer: THM{c956f455fc076aea829799c0876ee399}
+#### 5 – What is the fifth flag you receive after successfully detecting sample5.exe?
+Answer: THM{46b21c4410e47dc5729ceadef0fc722e}
+#### 6 – What is the final flag you receive from Sphinx?
+Answer: THM{c8951b2ad24bbcbac60c16cf2c83d92c}
+
+### Thoughts
+
+- This challenge helped us acknowledge how the pyramid of pain can work in the case of an attack.
+- Ascending on its path, we can conclude with different reasonings:
+    - Hashes, while easy to block, are very easy to change for threat actors, which also doesn’t give us much information on how they operate.
+    - IPs, they can serve some purpose while trying to be defended, however… There’s the catch that they’re easily fakeable, not only that but it doesn’t require much effort as attackers can change them or use multiple computers which could make blocking just one completely useless.
+    - DNS, it’s one step forward in order to defend ourselves, although, it starts to annoy the attacker team, it’s still not enough nor highly reliable.
+    - Network / Host artifacts, this is where things start getting serious for our adversaries, as they’re getting more and more power removed and discovered. It’s a big improvement but they still can make some changes.
+    - Tools, this is where we start getting even more serious, at this point we’re just one step left to know what could motivate our attackers, what is the point of their attacks, what they are trying to obtain. Knowing their weapons, we can get appropriate shields to defend from them. If they try to use water to flood our ship by using a hole, we might be able to stop them closing that hole.
+    - TTPs, and this one. Is the key, the last step. Here we not only know all of the above, but we finally acknowledge what their steps are:
+        - What they were trying to accomplish.
+        - What they wanted to do with our data.
+        - Which data they wanted to steal if that was the case.
+        - What tools they were using or which ones could be the next selected.
+        - What could be the next reasoning…
+        - There are even more questions we have asked with this last step, now we know for sure they might take some time to attack us or they might need to use another approach.
+        - No matter what, we’ll try to be prepared for the next threats.
