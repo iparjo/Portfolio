@@ -208,21 +208,21 @@ net start >> %temp%\exfiltr8.log
 - We get our final answer for question 6:
     - THM{c8951b2ad24bbcbac60c16cf2c83d92c}
 
-### Questions to answers
-#### 1- What is the first flag you receive after successfully detecting sample1.exe?
+## Questions to answers
+### 1- What is the first flag you receive after successfully detecting sample1.exe?
 Answer: THM{f3cbf08151a11a6a331db9c6cf5f4fe4}
-#### 2 – What is the second flag you receive after successfully detecting sample2.exe?
+### 2 – What is the second flag you receive after successfully detecting sample2.exe?
 Answer: THM{2ff48a3421a938b388418be273f4806d}
-#### 3 – What is the third flag you receive after successfully detecting sample3.exe?
+### 3 – What is the third flag you receive after successfully detecting sample3.exe?
 Answer: THM{4eca9e2f61a19ecd5df34c788e7dce16}
-#### 4 – What is the fourth flag you receive after successfully detecting sample4.exe?
+### 4 – What is the fourth flag you receive after successfully detecting sample4.exe?
 Answer: THM{c956f455fc076aea829799c0876ee399}
-#### 5 – What is the fifth flag you receive after successfully detecting sample5.exe?
+### 5 – What is the fifth flag you receive after successfully detecting sample5.exe?
 Answer: THM{46b21c4410e47dc5729ceadef0fc722e}
-#### 6 – What is the final flag you receive from Sphinx?
+### 6 – What is the final flag you receive from Sphinx?
 Answer: THM{c8951b2ad24bbcbac60c16cf2c83d92c}
 
-### Thoughts
+## Thoughts
 
 - This challenge helped us acknowledge how the pyramid of pain can work in the case of an attack.
 - Ascending on its path, we can conclude with different reasonings:
