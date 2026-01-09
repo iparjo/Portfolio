@@ -50,7 +50,7 @@ During my journey, I’ve worked with the following tools:
 
 | Category | Tools |
 |----------|-------|
-| 🔍 Recon & Enumeration | nmap, dirb, amass |
+| 🔍 Recon & Enumeration | nmap |
 | 🧰 Exploitation | Metasploit, Burp Suite |
 | 🧪 Learning Platforms | TryHackMe, HTB |
 | 📄 Documentation | Markdown, Git |
